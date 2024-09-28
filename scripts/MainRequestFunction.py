@@ -4,11 +4,11 @@ from Classifier import classify_request
 from NameTime import extract_name_and_time
 
 # Основная функция обработки запросов
-def handle_request(appointments):
+def handle_request(appointments, model):
     user_input = speech_to_text() # получаем запрос от пользователя
     
     if user_input:
-        category = classify_request(user_input) # Классифицируем запрос
+        category = classify_request(user_input, model) # Классифицируем запрос
 
         if category == "запись на прием":
             # Извлекаем имя и время
