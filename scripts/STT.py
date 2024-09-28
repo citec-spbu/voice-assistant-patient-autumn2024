@@ -1,6 +1,7 @@
 import speech_recognition as sr
 from TTS import text_to_speech
 
+# Модуль преобразования речи в текст
 def speech_to_text():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
