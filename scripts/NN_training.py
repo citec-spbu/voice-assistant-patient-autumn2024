@@ -66,3 +66,9 @@ with torch.no_grad():
         outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
         val_loss = outputs.loss
         print(f"Val Loss: {val_loss.item()}")
+
+# Сохранение параметров модели
+torch.save(model.state_dict(), "model_weights.pth")
+
+# Сохранение всего объекта модели
+torch.save(model, "full_model.pth")
