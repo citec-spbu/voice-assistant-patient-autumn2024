@@ -3,3 +3,4 @@ gTTS==2.2.4
 playsound==1.2.2
 scikit-learn==1.2.2
 nltk==3.8.1
+speakerpy==0.1.2
