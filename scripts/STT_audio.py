@@ -8,8 +8,8 @@ SAMPLE_RATE = 16000
 
 SetLogLevel(0)
 
-# Загрузка модели для русского языка (укажите корректный путь)
-model = Model("/root/voice-assistant-patient-autumn2024/vosk_model")
+# Загрузка модели для русского языка 
+model = Model(lang="ru")
 
 rec = KaldiRecognizer(model, SAMPLE_RATE)
 
