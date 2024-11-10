@@ -25,3 +25,88 @@ from TTS import vocalize
 
 vocalize("Привет", True)
 ```
+# STT (Speech-to-Text) block
+
+STT (Speech-to-Text) block - поддерживает генерацию текста по аудио или же в режиме реального времени, используя микрофон.
+
+# Запуск файла "STT_audio.py" для получения текста из аудио
+ 1. **Создайте и активируйте виртуальное окружение**:
+
+   - **Для Mac или Linux**:
+     ```bash
+     python3 -m venv env
+     source env/bin/activate
+     ```
+
+   - **Для Windows**:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+ 2. **Запустите файлик**:
+   ```bash
+   python3 STT_audio.py <название аудио>
+   ```
+     
+3. **В файлик transcription.txt запишется содержимое аудио**.
+
+
+# Запуск файла "STT_RealTime.py" для получения текста из аудио
+1. **Проверьте, что микрофон на вашем устройстве включён**
+2. **Создайте и активируйте виртуальное окружение**:
+
+   - **Для Mac или Linux**:
+     ```bash
+     python3 -m venv env
+     source env/bin/activate
+     ```
+
+   - **Для Windows**:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+ **Запустите файлик**:
+   ```bash
+   python3 STT_RealTime.py
+   ```
+3. **Говорите свою речь и нажмите Ctrl+C для остановки записи**.
+4. **В файлик transcript.txt запишется содержимое разговора**.
+
+     
+# Работа с базами данных
+1. **Предварительно установите Docker** для вашей системы.
+2. **Склонируйте репозиторий**:
+
+   ```bash
+   git clone <URL_репозитория>
+   cd <название_папки_с_репозиторием>
+   ```
+3. **Зайдите в папку 'db'**
+4. **Создайте и активируйте виртуальное окружение**:
+
+   - **Для Mac или Linux**:
+     ```bash
+     python3 -m venv env
+     source env/bin/activate
+     ```
+
+   - **Для Windows**:
+     ```bash
+     python -m venv venv
+     venv\Scripts\activate
+     ```
+5. **Соберите и запустите контейнеры**:
+
+   ```bash
+   make run-docker
+   ```
+6. **Доступ к приложению**:
+
+   После успешного выполнения миграций, приложение будет доступно по адресу: [http://localhost:8000](http://localhost:8000).
+
+7. **Остановите контейнеры и удалите созданные образы**:
+
+   ```bash
+   make stop-docker
+
