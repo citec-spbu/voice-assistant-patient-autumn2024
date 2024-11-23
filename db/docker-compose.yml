@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  clinic:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: clinic
+    image: clinic
+    ports:
+      - 8000:8000
+    depends_on:
+      clinic-postgres:
+        condition: service_healthy
+    # command: >
+    #   /bin/sh -c "alembic upgrade head && alembic revision --autogenerate -m 'Initial migration' && uvicorn blog.main:app --host 0.0.0.0 --port 8000 --reload"
+    networks:
+      - clinic-network
+
+  clinic-postgres:
+    container_name: clinic-postgres
+    ports:
+      - 5434:5432
+    environment:
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - clinic-pg-data:/var/lib/postgresql/data
+    image: postgres:15-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 1s
+      timeout: 1s
+      retries: 10
+    networks:
+      - clinic-network
+
+volumes:
+  clinic-pg-data: 
+    name: clinic-pg-data
+
+networks:
+  clinic-network:
+    driver: bridge
