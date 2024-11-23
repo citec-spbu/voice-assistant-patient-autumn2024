@@ -1,8 +1,8 @@
+pandas==2.2.0
+playsound==1.3.0
+regex==2024.9.11
+SpeechRecognition==3.11.0
+uvicorn==0.30.6
 SpeechRecognition==3.8.1
 gTTS==2.2.4
 playsound==1.2.2
-scikit-learn==1.2.2
-nltk==3.8.1
-sounddevice==0.5.1
-vosk==Ф0.3.45
-speakerpy==0.1.2
