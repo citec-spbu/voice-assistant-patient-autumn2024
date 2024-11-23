@@ -243,3 +243,8 @@ wrapt==1.16.0
 yarl==1.10.0
 zc.lockfile==3.0.post1
 zipp==3.20.1
+SpeechRecognition==3.8.1
+gTTS==2.2.4
+playsound==1.2.2
+scikit-learn==1.2.2
+nltk==3.8.1
