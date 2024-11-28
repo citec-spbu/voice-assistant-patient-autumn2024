@@ -11,9 +11,9 @@ class Engine:
 
         self.status = {
             'request' : None,
-            'doctor' : None, 
-            'date' : None, 
-            'time'  : None, 
+            'doctor' : None,
+            'date' : None,
+            'time'  : None,
             # 'new_date' : None, 
             # 'new_time' : None,
         }
@@ -51,11 +51,37 @@ class Engine:
             print(self.status.values())
 
         confirmation = f"Произведена {self.status['request']} \
-            к {self.status['doctor']}y \
+            к {self.status['doctor']}у \
                 на {self.date_to_words(self.status['date'])} \
-                    в {self.time_to_words(self.status['time'])}"
+                    в {self.time_to_words(self.status['time'])}. Верно?"
         print(confirmation)
         self.vocalize(confirmation, True)
+
+        response = None
+        while response is None:
+            speech = next(self.listener.get_speech())
+            response = self.parser.extract_yes_or_no(speech)
+            print(response)
+            
+        if response:
+            goodbye = f"До свидания."
+            print(goodbye)
+            self.vocalize(goodbye, True)
+            return
+        else:
+            repeat = f"Пожалуйста, повторите запрос."
+            print(repeat)
+            self.vocalize(repeat, True)
+            
+            self.status = {
+                'request' : None,
+                'doctor' : None,
+                'date' : None,
+                'time'  : None,
+                # 'new_date' : None, 
+                # 'new_time' : None,
+            }
+            call.main()
 
 
 if __name__ == "__main__":

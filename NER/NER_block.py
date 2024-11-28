@@ -75,7 +75,7 @@ class NER_parser:
         days = {
             "первое": 1, "первого": 1, "первым": 1,
             "второе": 2, "второго": 2, "вторым": 2,
-            "третье": 3, "третего": 3, "третим": 3,
+            "третье": 3, "третего": 3, "третьим": 3,
             "четвёртое": 4, "четвёртого": 4, "четвёртым": 4,
             "пятое": 5, "пятого": 5, "пятым": 5,
             "шестое": 6, "шестого": 6, "шестым": 6,
@@ -199,6 +199,18 @@ class NER_parser:
                 time_str = f"{hour:02}:{minute:02}"
             return time_str, text
         return None, text
+    
+    def extract_yes_or_no(self, text):
+        yes_or_no = {
+            "да": True, "нет": False
+            }
+        text = text.lower()
+        yes_no = None
+        for key in yes_or_no.keys():
+            if key in text:
+                yes_no = yes_or_no[key]
+                break
+        return yes_no
 
 # # Пример текста
 # text = "Отменить запись к хирургу двадцать пятого сентября на семь часов двадцать пять минут"
