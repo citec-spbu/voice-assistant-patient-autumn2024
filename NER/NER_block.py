@@ -124,6 +124,23 @@ class NER_parser:
         text = text.lower()
         day = None
         month = None
+
+        # Проверка на относительные даты
+        if "сегодня" in text:
+            date = datetime.now()
+            text = text.replace("сегодня", "").strip()
+        elif "послезавтра" in text:
+            date = datetime.now() + timedelta(days=2)
+            text = text.replace("послезавтра", "").strip()
+        elif "завтра" in text:
+            date = datetime.now() + timedelta(days=1)
+            text = text.replace("завтра", "").strip()
+        else:
+            date = None
+
+        if date:
+            return date.strftime("%d.%m"), text
+
         # Находим день
         for key in sorted(days.keys(), key=len, reverse=True):
             if key in text:
