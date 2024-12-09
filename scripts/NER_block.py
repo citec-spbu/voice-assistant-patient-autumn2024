@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def extract_response(text):
     # Словарь запросов
@@ -90,6 +90,23 @@ def text_to_date(text):
     text = text.lower()
     day = None
     month = None
+
+    # Проверка на относительные даты
+    if "сегодня" in text:
+        date = datetime.now()
+        text = text.replace("сегодня", "").strip()
+    elif "послезавтра" in text:
+        date = datetime.now() + timedelta(days=2)
+        text = text.replace("послезавтра", "").strip()
+    elif "завтра" in text:
+        date = datetime.now() + timedelta(days=1)
+        text = text.replace("завтра", "").strip()
+    else:
+        date = None
+
+    if date:
+        return date.strftime("%d.%m"), text
+
     # Находим день
     for key in sorted(days.keys(), key=len, reverse=True):
         if key in text:
@@ -192,8 +209,8 @@ def extract_date_time_doctor(text):
     return (response, doctor, date, time)
 
 # Пример текста
-#text = "Отменить запись к хирургу двадцать пятого декабря на семь часов двадцать пять минут"
+text = "Отменить запись к хирургу сегодня на семь часов двадцать пять минут"
 
 # Извлечение даты, времени и врача
-#data = extract_date_time_doctor(text)
-#print(data)
+data = extract_date_time_doctor(text)
+print(data)
