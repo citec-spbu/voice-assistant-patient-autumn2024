@@ -6,4 +6,3 @@ uvicorn==0.30.6
 SpeechRecognition==3.8.1
 gTTS==2.2.4
 playsound==1.2.2
-nltk==3.8.1
