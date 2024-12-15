@@ -38,7 +38,7 @@ class Engine:
     def time_to_words(self, time):
         time_list = time.split(':')
         if time_list[1][0] == '0':
-            time_list[1] = ' ноль ' + time_list[1][1:]
+            time_list[1] = ' 0 ' + time_list[1][1:]
         return time_list[0] + ' ' + time_list[1]
 
     def main(self):
@@ -50,39 +50,12 @@ class Engine:
                     self.status[key] = entities[key]
             print(self.status.values())
 
-        if self.status['request'] == "Запись":
-            confirmation = f"Произведена {self.status['request']} \
-            к {self.status['doctor']}у \
-                на {self.date_to_words(self.status['date'])} \
-                    в {self.time_to_words(self.status['time'])}. Верно?"
-            print(confirmation)
-            self.vocalize(confirmation, True)
-        elif self.status['request'] == "Отмена":
-            confirmation = f"Ваша запись отменена"
-            print(confirmation)
-            self.vocalize(confirmation, True)
-        elif self.status['request'] == "Перенос":
-            self.vocalize("Подскажите новые дату, время и врача")
-            self.status = {
-                'request' : "Запись",
-                'doctor' : None, 
-                'date' : None, 
-                'time'  : None, 
-            }
-            while None in self.status.values():
-                speech = next(self.listener.get_speech())
-                entities = self.parser.parse(speech)
-                for key in self.status:
-                    if self.status[key] is None and entities[key] is not None:
-                        self.status[key] = entities[key]
-                print(self.status.values())
-            
-            confirmation = f"Произведена {self.status['request']} \
-            к {self.status['doctor']}у \
-                на {self.date_to_words(self.status['date'])} \
-                    в {self.time_to_words(self.status['time'])}. Верно?"
-            print(confirmation)
-            self.vocalize(confirmation, True)
+        confirmation = f"Производится {self.status['request']} \
+        к {self.status['doctor']}у \
+            на {self.date_to_words(self.status['date'])} \
+                в {self.time_to_words(self.status['time'])}. Верно?"
+        print(confirmation)
+        self.vocalize(confirmation, True)
 
         response = None
         while response is None:
@@ -91,10 +64,23 @@ class Engine:
             print(response)
             
         if response:
-            goodbye = f"До свидания."
-            print(goodbye)
-            self.vocalize(goodbye, True)
-            return
+            if self.status['request'] == "Перенос":
+                asknew = "Скажите новую дату и время."
+                print(asknew)
+                self.vocalize(asknew, True)
+                self.status = {
+                    'request' : "Запись",
+                    'doctor' : self.status['doctor'], 
+                    'date' : None, 
+                    'time'  : None, 
+                }
+                call.main()
+                return
+            else:
+                goodbye = f"До свидания."
+                print(goodbye)
+                self.vocalize(goodbye, True)
+                return
         else:
             repeat = f"Пожалуйста, повторите запрос."
             print(repeat)
