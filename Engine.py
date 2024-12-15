@@ -61,7 +61,7 @@ class Engine:
             for key in self.status:
                 if self.status[key] is None and entities[key] is not None:
                     self.status[key] = entities[key]
-                current_date = str(datetime.now()).split(" ")
+                current_date = str(datetime.now()).split(" ")[0]
                 year = current_date.split("-")[0]
                 month = current_date.split("-")[1]
                 day = current_date.split("-")[2]
