@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class NER_parser:
 
@@ -75,7 +75,7 @@ class NER_parser:
         days = {
             "первое": 1, "первого": 1, "первым": 1,
             "второе": 2, "второго": 2, "вторым": 2,
-            "третье": 3, "третьего": 3, "третьим": 3,
+            "третье": 3, "третего": 3, "третим": 3,
             "четвёртое": 4, "четвёртого": 4, "четвёртым": 4,
             "пятое": 5, "пятого": 5, "пятым": 5,
             "шестое": 6, "шестого": 6, "шестым": 6,
@@ -124,6 +124,23 @@ class NER_parser:
         text = text.lower()
         day = None
         month = None
+
+        # Проверка на относительные даты
+        if "сегодня" in text:
+            date = datetime.now()
+            text = text.replace("сегодня", "").strip()
+        elif "послезавтра" in text:
+            date = datetime.now() + timedelta(days=2)
+            text = text.replace("послезавтра", "").strip()
+        elif "завтра" in text:
+            date = datetime.now() + timedelta(days=1)
+            text = text.replace("завтра", "").strip()
+        else:
+            date = None
+
+        if date:
+            return date.strftime("%d.%m"), text
+
         # Находим день
         for key in sorted(days.keys(), key=len, reverse=True):
             if key in text:
@@ -199,18 +216,6 @@ class NER_parser:
                 time_str = f"{hour:02}:{minute:02}"
             return time_str, text
         return None, text
-    
-    def extract_yes_or_no(self, text):
-        yes_or_no = {
-            "да": True, "нет": False
-            }
-        text = text.lower()
-        yes_no = None
-        for key in yes_or_no.keys():
-            if key in text:
-                yes_no = yes_or_no[key]
-                break
-        return yes_no
 
 # # Пример текста
 # text = "Отменить запись к хирургу двадцать пятого сентября на семь часов двадцать пять минут"
@@ -219,4 +224,3 @@ class NER_parser:
 # parser = NER_parser()
 # data = parser.parse(text)
 # print(data)
-
