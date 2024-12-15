@@ -50,12 +50,39 @@ class Engine:
                     self.status[key] = entities[key]
             print(self.status.values())
 
-        confirmation = f"Произведена {self.status['request']} \
+        if self.status['request'] == "Запись":
+            confirmation = f"Произведена {self.status['request']} \
             к {self.status['doctor']}у \
                 на {self.date_to_words(self.status['date'])} \
                     в {self.time_to_words(self.status['time'])}. Верно?"
-        print(confirmation)
-        self.vocalize(confirmation, True)
+            print(confirmation)
+            self.vocalize(confirmation, True)
+        elif self.status['request'] == "Отмена":
+            confirmation = f"Ваша запись отменена"
+            print(confirmation)
+            self.vocalize(confirmation, True)
+        elif self.status['request'] == "Перенос":
+            self.vocalize("Подскажите новые дату, время и врача")
+            self.status = {
+                'request' : "Запись",
+                'doctor' : None, 
+                'date' : None, 
+                'time'  : None, 
+            }
+            while None in self.status.values():
+                speech = next(self.listener.get_speech())
+                entities = self.parser.parse(speech)
+                for key in self.status:
+                    if self.status[key] is None and entities[key] is not None:
+                        self.status[key] = entities[key]
+                print(self.status.values())
+            
+            confirmation = f"Произведена {self.status['request']} \
+            к {self.status['doctor']}у \
+                на {self.date_to_words(self.status['date'])} \
+                    в {self.time_to_words(self.status['time'])}. Верно?"
+            print(confirmation)
+            self.vocalize(confirmation, True)
 
         response = None
         while response is None:
