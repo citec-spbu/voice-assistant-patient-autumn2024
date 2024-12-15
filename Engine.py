@@ -61,13 +61,14 @@ class Engine:
             for key in self.status:
                 if self.status[key] is None and entities[key] is not None:
                     self.status[key] = entities[key]
-                current_date = str(datetime.now()).split(" ")[0]
-                year = current_date.split("-")[0]
-                month = current_date.split("-")[1]
-                day = current_date.split("-")[2]
-                cur_date = day + "." + month + "." + year
-                if self.status['date'] == cur_date:
-                    self.status = self.check_today_time(self.status)
+                if (self.status['date'] is not None) and (self.status['time'] is not None):
+                    current_date = str(datetime.now()).split(" ")[0]
+                    year = current_date.split("-")[0]
+                    month = current_date.split("-")[1]
+                    day = current_date.split("-")[2]
+                    cur_date = day + "." + month + "." + year
+                    if self.status['date'] == cur_date:
+                        self.status = self.check_today_time(self.status)
             print(self.status.values())
 
         confirmation = f"Производится {self.status['request']} \
