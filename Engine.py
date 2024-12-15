@@ -44,6 +44,7 @@ class Engine:
 
         if prepared_time < now_time:
             self.vocalize("Выберите другое время", True)
+            entities_vocab['date'] = None
             entities_vocab['time'] = None
             return entities_vocab
         return entities_vocab
