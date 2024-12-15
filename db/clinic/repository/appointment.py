@@ -6,7 +6,7 @@ def get_all_appointments(db: Session):
     return db.query(models.Appointment).all()
 
 def create_appointment(request: schemas.AppointmentBase, db: Session):
-    new_appointment = models.Appointment(**request.dict())
+    new_appointment = models.Appointment(**request.model_dump())  
     db.add(new_appointment)
     db.commit()
     db.refresh(new_appointment)

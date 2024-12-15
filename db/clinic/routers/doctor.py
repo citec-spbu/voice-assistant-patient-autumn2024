@@ -15,6 +15,10 @@ get_db = database.get_db
 def get_doctors(db: Session = Depends(get_db)):
     return doctor.get_all_doctors(db)
 
+@router.get("/specialization", response_model=List[schemas.DoctorShow])
+def get_doctors(specialization: str, db: Session = Depends(get_db)):
+    return doctor.get_doctors_by_specialization(specialization, db)
+
 @router.post("/", response_model=schemas.DoctorShow)
 def create_doctor(request: schemas.DoctorBase, db: Session = Depends(get_db)):
     return doctor.create_doctor(request, db)

@@ -27,8 +27,6 @@ class DoctorShow(DoctorBase):
     class Config:
         orm_mode = True
 
-
-
 class ScheduleBase(BaseModel):
     doctor_id: int
     start_time: datetime

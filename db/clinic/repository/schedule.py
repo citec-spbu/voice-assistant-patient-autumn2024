@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
+from datetime import datetime
 from .. import models, schemas
 
 def get_all_schedules(db: Session):
@@ -11,6 +12,17 @@ def get_all_schedules(db: Session):
 #     db.commit()
 #     db.refresh(new_schedule)
 #     return new_schedule
+
+def get_schedules_by_doctors_and_start_time(
+    doctor_ids: list[int], start_time: datetime, db: Session
+):
+    schedules = db.query(models.Schedule).filter(
+        models.Schedule.doctor_id.in_(doctor_ids),
+        models.Schedule.start_time == start_time,
+        models.Schedule.is_booked == False
+    ).all()
+
+    return schedules
 
 def create_schedule(request: schemas.ScheduleBase, db: Session):
     # Получаем врача для проверки его рабочего времени
@@ -54,6 +66,27 @@ def update_schedule(id: int, request: schemas.ScheduleBase, db: Session):
         setattr(schedule, key, value)
     
     db.commit()
+    return schedule
+
+def book_schedule(schedule_id: int, db: Session):
+    schedule = db.query(models.Schedule).filter(models.Schedule.id == schedule_id).first()
+
+    if not schedule:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No schedules found with this id"
+        )
+
+    if schedule.is_booked:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Schedule is already booked"
+        )
+
+    schedule.is_booked = True
+    db.commit()
+    db.refresh(schedule)
+
     return schedule
 
 def delete_schedule(id: int, db: Session):
