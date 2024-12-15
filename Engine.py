@@ -1,6 +1,7 @@
 import STT
 import NER
 import TTS
+from datetime import datetime
 
 class Engine:
 
@@ -34,6 +35,18 @@ class Engine:
         return (day_list[int(date_list[0]) - 1] + ' ' +
             month_list[int(date_list[1]) - 1])
     
+    def check_today_time(self, entities_vocab):
+        dat = datetime.now()
+
+        time1 = str(dat).split(" ")[1].split(".")[0]
+        now_time = int(time1.split(":")[0]) * 60 + int(time1.split(":")[1])
+        prepared_time = int(entities_vocab['time'].split(":")[0]) * 60 + int(entities_vocab['time'].split(":")[1])
+
+        if prepared_time < now_time:
+            self.vocalize("Выберите другое время", True)
+            entities_vocab['time'] = None
+            return entities_vocab
+        return entities_vocab
 
     def time_to_words(self, time):
         time_list = time.split(':')
@@ -48,6 +61,13 @@ class Engine:
             for key in self.status:
                 if self.status[key] is None and entities[key] is not None:
                     self.status[key] = entities[key]
+                current_date = str(datetime.now()).split(" ")
+                year = current_date.split("-")[0]
+                month = current_date.split("-")[1]
+                day = current_date.split("-")[2]
+                cur_date = day + "." + month + "." + year
+                if self.status['date'] == cur_date:
+                    self.status = self.check_today_time(self.status)
             print(self.status.values())
 
         confirmation = f"Производится {self.status['request']} \
