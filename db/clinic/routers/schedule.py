@@ -20,6 +20,11 @@ def get_schedules(db: Session = Depends(get_db)):
 def get_schedules_by_doctors_and_start_time(start_time: datetime, doctor_ids: List[int] = Query(None), db: Session = Depends(get_db)):
     return schedule.get_schedules_by_doctors_and_start_time(doctor_ids, start_time, db)
 
+@router.get("/filter/booked", response_model=List[schemas.ScheduleShow])
+def get_booked_schedules_by_doctors_and_start_time(start_time: datetime, doctor_ids: List[int] = Query(None), db: Session = Depends(get_db)):
+    return schedule.get_booked_schedules_by_doctors_and_start_time(doctor_ids, start_time, db)
+
+
 @router.post("/", response_model=schemas.ScheduleShow)
 def create_schedule(request: schemas.ScheduleBase, db: Session = Depends(get_db)):
     return schedule.create_schedule(request, db)
@@ -31,6 +36,10 @@ def update_schedule(id: int, request: schemas.ScheduleBase, db: Session = Depend
 @router.put("/{id}/book", response_model=schemas.ScheduleShow)
 def book_schedule(id: int, db: Session = Depends(get_db)):
     return schedule.book_schedule(id, db)
+
+@router.put("/{id}/unbook", response_model=schemas.ScheduleShow)
+def unbook_schedule(id: int, db: Session = Depends(get_db)):
+    return schedule.unbook_schedule(id, db)
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_schedule(id: int, db: Session = Depends(get_db)):
