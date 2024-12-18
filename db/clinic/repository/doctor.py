@@ -18,6 +18,10 @@ def get_doctor(id: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Doctor not found")
     return doctor
 
+def get_doctors_by_specialization(specialization: str, db: Session):
+    doctors = db.query(models.Doctor).filter(models.Doctor.specialization == specialization).all()
+    return doctors
+
 def update_doctor(id: int, request: schemas.DoctorBase, db: Session):
     doctor = db.query(models.Doctor).filter(models.Doctor.id == id).first()
     if not doctor:
